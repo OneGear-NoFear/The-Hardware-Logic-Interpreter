@@ -1,1 +1,20 @@
-
+public class Phone extends Hardware {
+    
+    public Phone(int id, String brand, String model, int spec, String type) {
+        super(id, brand, model, spec, type);
+    }
+    
+    @Override
+    public String interpretSpec() {
+        int spec = getSpec();
+        if (spec == 50) {
+            return spec + " Megapixels";
+        } else if (spec == 48) {
+            return spec + " Megapixels";
+        } else if (spec == 16) {
+            return spec + " Megapixels";
+        } else {
+            return spec + " Megapixels"; // Default interpretation for phones
+        }
+    }
+}
