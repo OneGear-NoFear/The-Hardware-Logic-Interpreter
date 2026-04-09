@@ -1,0 +1,126 @@
+import java.util.List;
+
+public class HardwareLogicInterpreter {
+    
+    public static void main(String[] args) {
+        Repository repository = new Repository();
+        List<Hardware> hardwareList = repository.getAllHardware();
+        
+        // Print Hardware Masterlist
+        printHardwareMasterlist(hardwareList);
+        
+        // Print Laptop and Phone Inventory
+        printInventory(hardwareList);
+        
+        // Polymorphic Audit
+        performPolymorphicAudit(hardwareList);
+    }
+    
+    private static void printHardwareMasterlist(List<Hardware> hardwareList) {
+        System.out.println("=" .repeat(70));
+        System.out.println("HARDWARE MASTERLIST");
+        System.out.println("=" .repeat(70));
+        System.out.printf("%-3s | %-15s | %-15s | %-10s | %s%n", 
+            "ID", "Brand", "Model", "Type", "Specification");
+        System.out.println("-".repeat(70));
+        
+        for (Hardware hardware : hardwareList) {
+            System.out.println(hardware);
+        }
+        System.out.println();
+    }
+    
+    private static void printInventory(List<Hardware> hardwareList) {
+        System.out.println("=" .repeat(70));
+        System.out.println("LAPTOP AND PHONE INVENTORY");
+        System.out.println("=" .repeat(70));
+        
+        int laptopCount = 0;
+        int phoneCount = 0;
+        
+        for (Hardware hardware : hardwareList) {
+            if (hardware instanceof Laptop) {
+                laptopCount++;
+            } else if (hardware instanceof Phone) {
+                phoneCount++;
+            }
+        }
+        
+        System.out.println("Total Laptops: " + laptopCount);
+        System.out.println("Total Phones: " + phoneCount);
+        
+        // Show detailed breakdown by specification
+        System.out.println("\nInventory by Specification:");
+        System.out.println("-".repeat(50));
+        
+        for (Hardware hardware : hardwareList) {
+            System.out.printf("%-15s | %-15s | %s%n", 
+                hardware.getBrand() + " " + hardware.getModel(),
+                hardware.getType(),
+                hardware.interpretSpec());
+        }
+        System.out.println();
+    }
+    
+    private static void performPolymorphicAudit(List<Hardware> hardwareList) {
+        System.out.println("=" .repeat(70));
+        System.out.println("POLYMORPHIC AUDIT");
+        System.out.println("=" .repeat(70));
+        
+        int count16GBLaptops = 0;
+        int count32GBLaptops = 0;
+        int count50MPPhones = 0;
+        
+        for (Hardware hardware : hardwareList) {
+            if (hardware instanceof Laptop) {
+                if (hardware.getSpec() == 16) {
+                    count16GBLaptops++;
+                } else if (hardware.getSpec() == 32) {
+                    count32GBLaptops++;
+                }
+            } else if (hardware instanceof Phone) {
+                if (hardware.getSpec() == 50) {
+                    count50MPPhones++;
+                }
+            }
+        }
+        
+        System.out.println("Total number of 16GB Laptops: " + count16GBLaptops);
+        System.out.println("Total number of 32GB Laptops: " + count32GBLaptops);
+        System.out.println("Total number of 50MP Phones: " + count50MPPhones);
+        
+        // Additional audit for other specifications (flexible for professor's requests)
+        System.out.println("\nDetailed Audit by Specification:");
+        System.out.println("-".repeat(50));
+        
+        // Group by spec values
+        int[] laptopSpecs = {16, 32, 8, 4}; // Include common specs for flexibility
+        int[] phoneSpecs = {50, 48, 16, 12}; // Include common specs for flexibility
+        
+        System.out.println("Laptops by RAM:");
+        for (int spec : laptopSpecs) {
+            int count = 0;
+            for (Hardware hardware : hardwareList) {
+                if (hardware instanceof Laptop && hardware.getSpec() == spec) {
+                    count++;
+                }
+            }
+            if (count > 0) {
+                System.out.println("  " + spec + "GB RAM: " + count + " laptop(s)");
+            }
+        }
+        
+        System.out.println("\nPhones by Camera MP:");
+        for (int spec : phoneSpecs) {
+            int count = 0;
+            for (Hardware hardware : hardwareList) {
+                if (hardware instanceof Phone && hardware.getSpec() == spec) {
+                    count++;
+                }
+            }
+            if (count > 0) {
+                System.out.println("  " + spec + " Megapixels: " + count + " phone(s)");
+            }
+        }
+    }
+}
